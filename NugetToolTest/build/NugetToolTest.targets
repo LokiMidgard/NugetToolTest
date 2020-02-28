@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!--Adds the generated files to compilation.-->
+  <Target Name="UpdateGeneratedFiles" DependsOnTargets="_UpdateGeneratedFiles" BeforeTargets="CoreCompile" Outputs="$(IntermediateOutputPath)%(MyGenerator.FileName).g.cs">
+    <ItemGroup>
+      <Compile Include="$(IntermediateOutputPath)%(MyGenerator.FileName).g.cs" />
+    </ItemGroup>
+  </Target>
+
+
+  <Target Name="_UpdateGeneratedFiles" Inputs="$(MSBuildProjectFile);@(MyGenerator)" Outputs="$(IntermediateOutputPath)%(MyGenerator.FileName).g.cs">
+
+    <Exec Command="echo namespace $(RootNamespace){ partial class Test { public const string &gt; $(IntermediateOutputPath)%(MyGenerator.FileName).g.cs "></Exec>
+    <Exec Command="echo %(MyGenerator.Filename) &gt;&gt; $(IntermediateOutputPath)%(MyGenerator.FileName).g.cs "></Exec>
+    <Exec Command="echo = @^&quot;  &gt;&gt; $(IntermediateOutputPath)%(MyGenerator.FileName).g.cs "></Exec>
+    <!--This calls this program-->
+    <Exec Command="dotnet &quot;$(MSBuildThisFileDirectory)../tools/NugetToolTest.dll&quot; &quot;%(MyGenerator.FullPath)&quot; &gt;&gt; $(IntermediateOutputPath)%(MyGenerator.FileName).g.cs "></Exec>
+    <Exec Command="echo ^&quot;;  &gt;&gt; $(IntermediateOutputPath)%(MyGenerator.FileName).g.cs "></Exec>
+    <Exec Command="echo  }} &gt;&gt; $(IntermediateOutputPath)%(MyGenerator.FileName).g.cs "></Exec>
+  </Target>
+</Project>

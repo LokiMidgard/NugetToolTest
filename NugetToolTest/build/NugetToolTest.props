@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!--Define a new Type of file: available under Build actions.-->
+  <ItemGroup>
+    <AvailableItemName Include="MyGenerator" />
+  </ItemGroup>
+
+  <!--Set the buildaction and the generator as default for our extension-->
+  <ItemGroup>
+    <MyGenerator Include="**/*.MyExtension">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </MyGenerator>
+  </ItemGroup>
+
+  <!--Let CoreCompile call our Generation-->
+  <PropertyGroup>
+    <CoreCompileDependsOn>UpdateGeneratedFiles;$(CoreCompileDependsOn)</CoreCompileDependsOn>
+  </PropertyGroup>
+</Project>

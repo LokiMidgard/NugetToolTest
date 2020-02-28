@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
+    <!--<IsTool>true</IsTool>-->
+    <Version>0.0.13</Version>
+  </PropertyGroup>
+
+  <!--Add build files-->
+  <ItemGroup>
+    <None Include="build\**" Pack="True" PackagePath="build\" />
+  </ItemGroup>
+
+  <!--Will put output in the tools folder-->
+  <PropertyGroup>
+    <BuildOutputTargetFolder>tools</BuildOutputTargetFolder>
+  </PropertyGroup>
+  
+  <!--A sample dependency-->
+  <ItemGroup>
+    <PackageReference Include="SharpZipLib" Version="1.2.0" />
+  </ItemGroup>
+
+
+  <!--We want all files in the output including the dependencys-->
+  <Target Name="PackTaskDependencies1" BeforeTargets="GenerateNuspec" >
+    <!--
+    The include needs to happen after output has been copied to build output folder
+    but before NuGet generates a nuspec. See https://github.com/NuGet/Home/issues/4704.
+    -->
+
+    <ItemGroup >
+      <_PackageFiles Include="bin\$(Configuration)\netcoreapp3.1\*.*">
+        <PackagePath>tools</PackagePath>
+        <Visible>false</Visible>
+        <BuildAction>Content</BuildAction>
+      </_PackageFiles>
+    </ItemGroup>
+  </Target>
+
+</Project>
